@@ -27,11 +27,12 @@ var VILLAINS = [
 var currentWordGuessed="";
 var answerArray = [];
 var userArray = [];
+var usedLetters = [];
 var gameOver = 0;
 var winCount = 0;
 var lossesCount = 0;
-var guessesLeft = 15;
-var usedLetters = [];
+
+
             
 
 //game control
@@ -41,24 +42,27 @@ var usedLetters = [];
 
 
 function init() {
+//computer chooses random word from array
+    guessesLeft=15;
     currentWordGuessed=VILLAINS[Math.floor(Math.random() * VILLAINS.length)];
     answerArray = [];
     for (var i = 0; i < currentWordGuessed.length; i++) {
         answerArray[i] = " _ ";
-        console.log(currentWordGuessed);
-       
+        console.log("computer guess: " + currentWordGuessed);
+     
        
  }
+//computer chosen word conversion into blank underscores
     console.log(answerArray.join(""));
     document.getElementById("answer").innerHTML = answerArray.join("");
-    
-
-
+     
+//initialize game
+   
 }
 init();
 
 //get user input
-function userGuess() {
+function userGuessInput() {
        
         var losses = 0;
         var wins = 0;
@@ -71,8 +75,8 @@ function userGuess() {
 
 //update the user guess
         for (var i = 0; i < currentWordGuessed.length; i++) {
-            if (userGuess === currentWordGuessed[i]) {
-                answerArray[i] = userGuess;
+            if (userGuessLowerCase === currentWordGuessed[i]) {
+                answerArray[i] = userGuessLowerCase;
                 console.log(userGuess);
                 document.getElementById("answer").innerHTML = answerArray.join("");
                 
@@ -80,19 +84,18 @@ function userGuess() {
             }
          }
             if (answerArray.indexOf(" _ ") === -1) {
-                var cumulativeUserGuesses =usedLetters.push(userGuess);
+                var cumulativeUserGuesses =usedLetters.push(userGuessLowerCase);
                 document.getElementById("user-guesses").innerHTML = ("You typed: " + usedLetters);
                 init();
+               
                 wins ++;
-                guessesLeft = 10;
-                restart();
                 console.log(wins);
                 document.getElementById("counter-wins").innerHTML = ("Wins: " + wins);
-                             
+                restart();             
             } 
             if (answerArray.indexOf(" _ ") !== -1) {
                 guessesLeft --;
-                var cumulativeUserGuesses =usedLetters.push(userGuess);
+                var cumulativeUserGuesses =usedLetters.push(userGuessLowerCase);
                 document.getElementById("user-guesses").innerHTML = ("You typed: " + usedLetters);
                 document.getElementById("guesses-left").innerHTML = ("Guesses left: " + guessesLeft);
                
@@ -103,25 +106,24 @@ function userGuess() {
                 document.getElementById("computer-choice").innerHTML = "The answer is: " + currentWordGuessed;
                 init();
                 losses++;
-                guessesLeft = 15;
                 document.getElementById("counter-losses").innerHTML = ("Losses: " + losses);
                 restart();
                 
                 
-            }
-       }
+        }
+   }
 }
 
-userGuess();
-            
+userGuessInput();
+
+//flush used letters from array
             
 function restart() {
     while(usedLetters.length > 0) {
     usedLetters.pop();
 }
-       
-    document.getElementById("user-guesses").innerHTML = "You typed: ";
-   
+     
+document.getElementById("user-guesses").innerHTML = "You typed: ";
         
 }       
          
